@@ -93,8 +93,8 @@ class _GuildeWidgetState extends State<GuildeWidget> {
             ),
             child: CachedNetworkImage(
               fit: BoxFit.cover,
-              // imageUrl: widget.model.image,
-              imageUrl: image,
+              imageUrl: widget.model.image,
+              // imageUrl: image,
               placeholder: (context, url) => SizedBox(
                 height: 200.h,
                 width: double.infinity,
