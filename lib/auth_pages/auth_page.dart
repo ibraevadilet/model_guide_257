@@ -25,7 +25,7 @@ class _AuthPageState extends State<AuthPage> {
       backgroundColor: const Color(0xff00C8FF),
       bottomNavigationBar: const SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           child: TermsButtons(color: Colors.white),
         ),
       ),
