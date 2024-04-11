@@ -47,7 +47,7 @@ class PrNavigatorApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Pregnancy Navigator App',
+        title: 'Model Guide App',
         theme: ThemeData.light().copyWith(
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,

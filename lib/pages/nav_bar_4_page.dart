@@ -114,23 +114,23 @@ class NavBar4Page extends StatelessWidget {
                 }
               },
             ),
-            SettWidget(
-              icon: AppGenerateImages.rsIcon,
-              title: 'Logout',
-              onTap: () async {
-                await FirebaseAuth.instance.signOut();
-                await asfasfasfafs.clear();
-                await asfasfasfafs.setBool('isOpened', true);
-                await calHive.clear();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AuthPage(),
-                  ),
-                  (protected) => false,
-                );
-              },
-            ),
+            // SettWidget(
+            //   icon: AppGenerateImages.rsIcon,
+            //   title: 'Logout',
+            //   onTap: () async {
+            //     await FirebaseAuth.instance.signOut();
+            //     await asfasfasfafs.clear();
+            //     await asfasfasfafs.setBool('isOpened', true);
+            //     await calHive.clear();
+            //     Navigator.pushAndRemoveUntil(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => const AuthPage(),
+            //       ),
+            //       (protected) => false,
+            //     );
+            //   },
+            // ),
             SettWidget(
               icon: AppGenerateImages.dlIcon,
               title: 'Delete account',
