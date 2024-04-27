@@ -2,7 +2,6 @@ import 'package:apphud/apphud.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:model_guide_257/auth_pages/auth_page.dart';
 import 'package:model_guide_257/components/terms_widgets.dart';
 import 'package:model_guide_257/images/app_generate_images.dart';
 import 'package:model_guide_257/main.dart';
@@ -45,7 +44,7 @@ class _ToBuyPageState extends State<ToBuyPage> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const AuthPage(),
+                              builder: (context) => const NavigPage(),
                             ),
                             (protected) => false,
                           );

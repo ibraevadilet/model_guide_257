@@ -1,12 +1,10 @@
 import 'package:apphud/apphud.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:model_guide_257/auth_pages/auth_page.dart';
 import 'package:model_guide_257/data/calendar_hive_model.dart/calendar_hive_model.dart';
 import 'package:model_guide_257/pages/info_screen.dart';
 import 'package:model_guide_257/pages/navig_page.dart';
@@ -27,10 +25,9 @@ void main() async {
   final isOpend = asfasfasfafs.getBool('isOpened') ?? false;
 
   await asfasfasfafs.setBool('isOpened', true);
-  final isUserAuth = FirebaseAuth.instance.currentUser == null;
+  // final isUserAuth = FirebaseAuth.instance.currentUser == null;
   if (isOpend) {
-    runApp(PrNavigatorApp(
-        childWidget: isUserAuth ? const AuthPage() : const NavigPage()));
+    runApp(const PrNavigatorApp(childWidget: NavigPage()));
   } else {
     runApp(const PrNavigatorApp());
   }

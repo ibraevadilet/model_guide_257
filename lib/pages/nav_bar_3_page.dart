@@ -1,15 +1,11 @@
-import 'dart:io';
+import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:model_guide_257/auth_pages/servieces/fb_auth_service.dart';
 import 'package:model_guide_257/images/app_generate_images.dart';
 import 'package:model_guide_257/main.dart';
-import 'package:shimmer/shimmer.dart';
 
 class NavBar3Page extends StatefulWidget {
   const NavBar3Page({super.key});
@@ -30,10 +26,9 @@ class _NavBar3PageState extends State<NavBar3Page> {
 
   @override
   void initState() {
-    email = asfasfasfafs.getString('email')!;
-    name = asfasfasfafs.getString('name')!;
+    name = asfasfasfafs.getString('name') ?? '';
     avatar = asfasfasfafs.getString('avatar');
-    about = asfasfasfafs.getString('about');
+    about = asfasfasfafs.getString('about') ?? '';
     images = asfasfasfafs.getStringList('images') ?? [];
     super.initState();
   }
@@ -124,11 +119,12 @@ class _NavBar3PageState extends State<NavBar3Page> {
                     setState(() {
                       isAvatarLoading = true;
                     });
-                    final url = await uploadImage(File(avatarFrom.path));
-                    avatar = url;
-                    CollectionReference firestore =
-                        FirebaseFirestore.instance.collection('users');
-                    await firestore.doc(email).update({"avatar": avatar});
+
+                    final lists = await avatarFrom.readAsBytes();
+
+                    String base64Image = base64Encode(lists);
+                    await asfasfasfafs.setString('avatar', base64Image);
+                    avatar = base64Image;
                     setState(() {
                       isAvatarLoading = false;
                     });
@@ -150,17 +146,26 @@ class _NavBar3PageState extends State<NavBar3Page> {
                               size: 100,
                             )
                           : Container(
-                              height: 110,
-                              width: 110,
+                              height: 113,
+                              width: 113,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
+                                color: Color(0xff00C8FF),
                               ),
                               clipBehavior: Clip.hardEdge,
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: avatar!,
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator.adaptive(),
+                              child: Center(
+                                child: Container(
+                                  height: 110,
+                                  width: 110,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.memory(
+                                    base64Decode(avatar!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                 ),
@@ -271,11 +276,6 @@ class _NavBar3PageState extends State<NavBar3Page> {
                                           'about', aboutController.text);
 
                                       setState(() {});
-                                      CollectionReference firestore =
-                                          FirebaseFirestore.instance
-                                              .collection('users');
-                                      await firestore.doc(email).update(
-                                          {"about": aboutController.text});
                                       aboutController.clear();
                                     },
                               child: Text(
@@ -351,13 +351,19 @@ class _NavBar3PageState extends State<NavBar3Page> {
                       setState(() {
                         isImageLoading = true;
                       });
+                      List<String> saveimages = [];
+
                       for (var e in imagesFrom) {
-                        final url = await uploadImage(File(e.path));
-                        images.insert(0, url);
+                        final lists = await e.readAsBytes();
+
+                        String base64Image = base64Encode(lists);
+                        saveimages.add(base64Image);
                       }
-                      CollectionReference firestore =
-                          FirebaseFirestore.instance.collection('users');
-                      await firestore.doc(email).update({"images": images});
+
+                      images = List.from(saveimages);
+
+                      await asfasfasfafs.setStringList('images', saveimages);
+
                       setState(() {
                         isImageLoading = false;
                       });
@@ -389,46 +395,26 @@ class _NavBar3PageState extends State<NavBar3Page> {
                   : SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                          children: images
-                              .map<Widget>(
-                                (e) => Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: Container(
-                                    clipBehavior: Clip.hardEdge,
-                                    height: 165.h,
-                                    width: 165.w,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: e,
-                                      placeholder: (context, url) => SizedBox(
-                                        height: 165.h,
-                                        width: 165.w,
-                                        child: Shimmer.fromColors(
-                                          baseColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          highlightColor: Colors.white,
-                                          child: Container(
-                                            height: 165.h,
-                                            width: 165.w,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child:
-                                                const CircularProgressIndicator
-                                                    .adaptive(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                        children: images
+                            .map<Widget>(
+                              (e) => Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  height: 165.h,
+                                  width: 165.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Image.memory(
+                                    base64Decode(e),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              )
-                              .toList()),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
             ),
           ],
